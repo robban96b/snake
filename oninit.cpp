@@ -5,9 +5,9 @@ bool Game::onInit() {
         return false;
     }
     // Creates a SDL Window
-    if ((window = SDL_CreateWindow("Image Loading", 100, 100, 800, 600,
-                                   SDL_WINDOW_RESIZABLE |
-                                       SDL_RENDERER_PRESENTVSYNC)) == NULL) {
+    if ((window = SDL_CreateWindow("My Snake Game", 500, 200, WINDOW_SIZE_WIDTH,
+                                   WINDOW_SIZE_HEIGHT,
+                                   SDL_RENDERER_PRESENTVSYNC)) == NULL) {
         return false;
     }
     // SDL Renderer
@@ -16,5 +16,15 @@ bool Game::onInit() {
         std::cout << SDL_GetError() << std::endl;
         return 1;
     }
+
+    Pose head = {WINDOW_SIZE_WIDTH / 2, WINDOW_SIZE_HEIGHT / 2,
+                 Direction::right};
+    Pose body = {WINDOW_SIZE_WIDTH / 2 - SQUARE_SIZE, WINDOW_SIZE_HEIGHT / 2,
+                 Direction::right};
+
+    snakePositions = {head, body};
+
+    gameIsPaused = true;
+    newWantedHeadDirection = Direction::right;
     return true;
 }

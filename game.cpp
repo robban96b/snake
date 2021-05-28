@@ -3,11 +3,8 @@
 Game::Game() {
     window = NULL;
     isRunning = true;
-    ball = NULL;
-    x = 400;
-    y = 300;
-    toggle = 0;
-    t = 0;
+    head = NULL;
+    body = NULL;
 }
 
 int Game::onExecute() {
@@ -17,14 +14,17 @@ int Game::onExecute() {
     if (loadContent() == false) {
         return -1;
     }
-
+    onRender();
     while (isRunning) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
         while (SDL_PollEvent(&event)) {
             onEvent(&event);
         }
+        if (!gameIsPaused) {
+            ticTime();
 
-        onLoop();
-        onRender();
+            onRender();
+        }
     }
 
     cleanup();
@@ -33,7 +33,8 @@ int Game::onExecute() {
 }
 
 void Game::cleanup() {
-    SDL_DestroyTexture(ball);
+    SDL_DestroyTexture(head);
+    SDL_DestroyTexture(body);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
