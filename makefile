@@ -7,7 +7,7 @@ CC := g++
 CFLAGS := `sdl2-config --libs --cflags`  --std=c++14 -Wall -lSDL2_image
 
 HDRS := includes.h game.h
-SRCS := game.cpp oninit.cpp loadcontent.cpp onevent.cpp onrender.cpp ticTime.cpp
+SRCS := game.cpp oninit.cpp loadcontent.cpp onevent.cpp onrender.cpp ticTime.cpp updateFood.cpp
 
 EXEC := game.out
 

@@ -3,30 +3,21 @@
 
 #include "includes.h"
 
-const int SQUARE_SIZE = 20;
+const int SQUARE_SIZE = 40;
 const int WINDOW_SIZE_WIDTH = 1000;
 const int WINDOW_SIZE_HEIGHT = 600;
-enum class Direction { up, down, left, right };
+const int GRID_SIZE_WIDTH = WINDOW_SIZE_WIDTH / SQUARE_SIZE - 2;
+const int GRID_SIZE_HEIGHT = WINDOW_SIZE_HEIGHT / SQUARE_SIZE - 2;
+const int INIT_SNAKE_LENGTH = 5;
 
-struct Pose {
-    int x;
-    int y;
+enum class Direction { up = 0, down = 180, left = 270, right = 90 };
+enum class GridObject { snake = -1, wall = -2, nothing = 0, food = 1 };
+
+struct SnakeBodyComponent {
+    int xCoordinateInGrid;
+    int yCoordinateInGrid;
     Direction direction;
 };
-
-inline std::ostream &operator<<(std::ostream &os, const Direction &d) {
-    switch (d) {
-    case Direction::up:
-        os << "Up";
-    case Direction::down:
-        os << "Down";
-    case Direction::left:
-        os << "Left";
-    case Direction::right:
-        os << "Right";
-    }
-    return os;
-}
 
 class Game {
   private:
@@ -36,17 +27,25 @@ class Game {
     SDL_Renderer *renderer;
     SDL_Event event;
 
-    SDL_Texture *head;
-    SDL_Rect rectHead;
+    SDL_Texture *headTexture;
+    SDL_Texture *bodyTexture;
+    SDL_Texture *wallTexture;
+    SDL_Texture *foodTexture;
 
-    SDL_Texture *body;
-    SDL_Rect rectBody;
+    int xFoodCoordinateInGrid;
+    int yFoodCoordinateInGrid;
 
+    GridObject grid[GRID_SIZE_WIDTH][GRID_SIZE_HEIGHT];
     Direction newWantedHeadDirection;
-    std::vector<Pose> snakePositions;
+    std::vector<SnakeBodyComponent> snakeBodyComponents;
 
   public:
     Game();
+    bool updateFood();
+    void initSnake();
+    void printGridAnalytic();
+    void printGridGraphic();
+    bool isMoveAllowed();
     void ticTime();
     int onExecute();
     bool onInit();
